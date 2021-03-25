@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name" required><br>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" required><br>
+    <label for="mobile_number">Mobile Number</label>
+    <input type="mobile_number" name="mobile_number" id="mobile_number" required><br>
+    <label for="address">Address</label>
+    <input type="address" name="address" id="address" required><br>
+    <label for="city">City</label>
+    <input type="city" name="city" id="city" required><br>
+    <label for="state">State</label>
+    <input type="state" name="state" id="state" required><br>
+    <label for="country">Country</label>
+    <input type="country" name="country" id="country" required><br>
+
+    <input type="submit" value="Register">
+  </form>
+
+  Already registerd?<br>
+  <ul>
+    <li><a href="{{ url_for('loginAsBuyer') }}">Login as buyer</a>
+    <li><a href="{{ url_for('loginAsSeller') }}">Login as seller</a>
+  </ul>
+
+{% endblock %}
+
