@@ -28,7 +28,7 @@ def create_app(test_config=None):
         pass
     
     try:
-        mongo = MongoClient("mongodb+srv://rrohit:Nikita123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
+        mongo = MongoClient("mongodb+srv://rrohit:---@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
         db = mongo.test
     except Exception as e:
         print(e)
