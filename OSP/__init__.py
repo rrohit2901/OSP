@@ -8,7 +8,7 @@ from flask import Flask, request, render_template, url_for, flash, redirect
 
 
 def create_app(test_config=None):
-    # create and configure the app 
+    # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -28,7 +28,7 @@ def create_app(test_config=None):
         pass
     
     try:
-        mongo = MongoClient("mongodb+srv://rrohit:---@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
+        mongo = MongoClient("mongodb+srv://rrohit:Nikita123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
         db = mongo.test
     except Exception as e:
         print(e)
@@ -138,7 +138,6 @@ def create_app(test_config=None):
                     mail_sender.quit()
                 except Exception as e:
                     print(e)
-                print(url_for('sec'))
                 return render_template('register.html')
 
             flash(error)
