@@ -13,8 +13,8 @@ class Item():
         self.isVerified = False
         self.city = self.seller.city
         self.db = db
-        self.item_id = Id
-        Id += 1
+        self.item_id = Item.Id
+        Item.Id += 1
         self.db.items.insert_one(
             "name":name,
             "category":category,
@@ -102,7 +102,16 @@ class Manager(Person):
             self.password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(password_length))
     
     def UploadToDB(self):
-        self.db.managers.insert_one({"name":self.name, "email":self.email, "telephone":self.telephone, "address":self.address, "gender":self.gender, "DOB":self.DOB, "username":self.username, "password":self.password})
+        self.db.managers.insert_one({
+            "name":self.name, 
+            "email":self.email, 
+            "telephone":self.telephone, 
+            "address":self.address, 
+            "gender":self.gender, 
+            "DOB":self.DOB, 
+            "username":self.username, 
+            "password":self.password
+        })
     
     def ManageBuyer(self):
         pass
@@ -185,9 +194,25 @@ class Buyer(Customer):
         shoppingCart.remove(item)
         order = Order(item, buyer, False)
         history.append(order)
+        self.UpdateDb()
     
     def InitiateNegotiation(self):
         pass
+
+    def AddToDB(self):
+        self.db.users.insert_one({
+            "name":self.name, 
+            "email":self.email, 
+            "telephone":self.telephone, 
+            "address":self.address, 
+            "city":self.city,
+            "Id":self.iD
+        })
+        self.db.buyers.insert_one({
+            "username":self.username,
+            "shoppingCart":self.shoppingCart,
+            "history":self.history
+        })
 
 class Seller(Customer):
     pass
