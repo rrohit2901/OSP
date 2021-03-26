@@ -5,8 +5,6 @@ import random
 import smtplib
 from pymongo import MongoClient
 from flask import Flask, request, render_template, url_for, flash, redirect
-from . import buyer
-from . import Entities
 
 
 def create_app(test_config=None):
@@ -30,7 +28,7 @@ def create_app(test_config=None):
         pass
     
     try:
-        mongo = MongoClient("mongodb+srv://rrohit:BestTrio123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
+        mongo = MongoClient("mongodb+srv://rrohit:Nikita123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
         db = mongo.test
     except Exception as e:
         print(e)
@@ -71,7 +69,7 @@ def create_app(test_config=None):
             password = request.form['password']
 
             error = None
-
+            '''
             if not db.users.find_one({"username":username}):
                 error = 'Invalid username'
             elif db.users.find_one({"username":username})['password']!=password:
@@ -80,6 +78,9 @@ def create_app(test_config=None):
             if error==None:
                 print(db.users.find_one({"username":username}))
                 return "%%%"
+            '''
+            if error == None:
+                return render_template('uploaditem.html')
 
             flash(error)
         return render_template('login.html')
@@ -98,7 +99,7 @@ def create_app(test_config=None):
             state = request.form['state']
             country = request.form['country']
             address = request.form['address']
-            telephone = request.form['mobile_number']
+            mobile_number = request.form['mobile_number']
             
             # Error in the validation of form
             error = None
@@ -117,9 +118,9 @@ def create_app(test_config=None):
                 error = 'Address is required'
             elif db.users.find_one({"email":email}):
                 error = 'Email is already registered'
-            elif db.users.find_one({"telephone":mobile_number}):
+            elif db.users.find_one({"mobile_number":mobile_number}):
                 error = 'Mobile number is already registered'
-            elif not telephone:
+            elif not mobile_number:
                 error = 'Mobile Number is required'
             elif not re.search(regex,email):
                 error = 'Email ID not valid'
@@ -128,7 +129,7 @@ def create_app(test_config=None):
                 password_length = 10
                 username = email.split('@')[0]
                 password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(password_length))
-                user = {"email":email, "name":name, "username":username, "address":address, "password":password, "telephone":mobile_number, "city":city, "state":state, "country":country}
+                user = {"email":email, "name":name, "username":username, "address":address, "password":password, "mobile_number":mobile_number, "city":city, "state":state, "country":country}
                 print(user)
                 try:
                     dbResponse = db.users.insert_one(user)
