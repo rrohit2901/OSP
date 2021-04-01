@@ -62,6 +62,10 @@ def create_app(test_config=None):
     def seller():
         return redirect('/seller/login')
 
+    @app.route('/seller/uploaditem', methods = ['POST', 'GET'])
+    def uploadItem():
+        return render_template('uploaditem.html')
+
     @app.route('/seller/login', methods = ['POST', 'GET'])
     def loginAsSeller():
         if request.method == 'POST':
@@ -80,7 +84,7 @@ def create_app(test_config=None):
                 return "%%%"
             '''
             if error == None:
-                return render_template('uploaditem.html')
+                return redirect(url_for('uploadItem'))
 
             flash(error)
         return render_template('login.html')
