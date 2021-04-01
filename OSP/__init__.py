@@ -3,9 +3,11 @@ import re
 import string
 import random
 import smtplib
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
 from flask import Flask, request, render_template, url_for, flash, redirect
-
+from . import Entities
+from . import buyer
+from email.message import EmailMessage
 
 def create_app(test_config=None):
     # create and configure the app
@@ -27,22 +29,22 @@ def create_app(test_config=None):
     except OSError:
         pass
     
+    app.register_blueprint(buyer.buyer_print)
+
     try:
-        mongo = MongoClient("mongodb+srv://rrohit:Nikita123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
+        mongo = MongoClient("mongodb+srv://rrohit2901:Begusarai123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
         db = mongo.test
     except Exception as e:
         print(e)
+        
     
 
-    @app.route('/buyer')
-    def buyer():
-        return redirect('/buyer/login')
-
-    @app.route('/buyer/login', methods = ['POST', 'GET'])
-    def loginAsBuyer():
+    @app.route('/login', methods = ['GET', 'POST'])
+    def login():
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
+            role = request.form['role']
 
             error = None
 
@@ -50,44 +52,14 @@ def create_app(test_config=None):
                 error = 'Invalid username'
             elif db.users.find_one({"username":username})['password']!=password:
                 error = 'Invalid password'
-            
             if error==None:
                 print(db.users.find_one({"username":username}))
-                return "$$$"
+                if role=="1":
+                    return redirect('/buyer/{}'.format(username))
+                else:
+                    return redirect('/seller')
 
-            flash(error)
-        return render_template('login.html')
-
-    @app.route('/seller')
-    def seller():
-        return redirect('/seller/login')
-
-    @app.route('/seller/uploaditem', methods = ['POST', 'GET'])
-    def uploadItem():
-        return render_template('uploaditem.html')
-
-    @app.route('/seller/login', methods = ['POST', 'GET'])
-    def loginAsSeller():
-        if request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
-
-            error = None
-            '''
-            if not db.users.find_one({"username":username}):
-                error = 'Invalid username'
-            elif db.users.find_one({"username":username})['password']!=password:
-                error = 'Invalid password'
-            
-            if error==None:
-                print(db.users.find_one({"username":username}))
-                return "%%%"
-            '''
-            if error == None:
-                return redirect(url_for('uploadItem'))
-
-            flash(error)
-        return render_template('login.html')
+        return render_template('Signin.html')
 
     @app.route('/')
     def home():
@@ -122,7 +94,7 @@ def create_app(test_config=None):
                 error = 'Address is required'
             elif db.users.find_one({"email":email}):
                 error = 'Email is already registered'
-            elif db.users.find_one({"mobile_number":mobile_number}):
+            elif db.users.find_one({"telephone":telephone}):
                 error = 'Mobile number is already registered'
             elif not mobile_number:
                 error = 'Mobile Number is required'
@@ -133,22 +105,27 @@ def create_app(test_config=None):
                 password_length = 10
                 username = email.split('@')[0]
                 password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(password_length))
-                user = {"email":email, "name":name, "username":username, "address":address, "password":password, "mobile_number":mobile_number, "city":city, "state":state, "country":country}
-                print(user)
+                buyer_ins = Entities.Buyer(name, email, telephone, address, city, db, username, password)
+                # seller_ins = Seller(name, email, telephone, address, db, username, password)
                 try:
-                    dbResponse = db.users.insert_one(user)
+                    buyer_ins.AddToDB()
+                    # seller_ins.AddToDB()
                     mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
                     mail_sender.starttls()
                     mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
+                    mail = EmailMessage()
+                    mail['From'] = 'osgrp37@gmail.com'
+                    mail['To'] = email
+                    mail['Subject'] = "Welcome!!!!"
                     message = "Hi {},\nWelcome to the online sales portal.\n\nYour login credentials are:-\n\tusername - {}\n\tpassword - {}\n\nHope you enjoy shopping with us.\nRegards,\nTeam 37.".format(name, username, password)
-                    mail_sender.sendmail("ospgroup37@gmail.com", email, message)
+                    mail.set_content(message)
+                    mail_sender.send_message(mail)
                     mail_sender.quit()
                 except Exception as e:
                     print(e)
-                return render_template('register.html')
+                return render_template('Register.html')
 
-            flash(error)
-        return render_template('register.html')
+        return render_template('Register.html')
 
         
 
