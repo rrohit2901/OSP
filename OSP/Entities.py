@@ -1,3 +1,5 @@
+import random
+import string
 class Item():
     Id = 0
     def __init__(self, name, category, price, image, age, company, info, seller, weight, db):
@@ -15,7 +17,7 @@ class Item():
         self.db = db
         self.item_id = Item.Id
         Item.Id += 1
-        self.db.items.insert_one(
+        self.db.items.insert_one({
             "name":name,
             "category":category,
             "price":price,
@@ -28,7 +30,7 @@ class Item():
             "isVerified":0,
             "city":self.city,
             "ItemId":item_id
-        )
+        })
     
     def Verify(self):
         self.isVerified = True
@@ -146,7 +148,7 @@ class Manager(Person):
 
 class Customer(Person):
     def __init__(self, name, email, telephone, address, db, city, username, password = None):
-        self.super.__init__(name, email, telephone, address, db)
+        super().__init__(name, email, telephone, address, db)
         self.city = city
         self.iD = self.db.users.count()
         self.username = username
@@ -167,8 +169,8 @@ class Customer(Person):
 
     
 class Buyer(Customer):
-    def __init__(self, name, email, telephone, address, db, username, password = None):
-        self.super.__init__(name, email, telephone, address, db, username, password)
+    def __init__(self, name, email, telephone, address, city, db, username, password = None):
+        super().__init__(name, email, telephone, address, db, city, username, password)
         self.buyerId = self.iD
         self.history = []
         self.shoppingCart = []
@@ -206,7 +208,9 @@ class Buyer(Customer):
             "telephone":self.telephone, 
             "address":self.address, 
             "city":self.city,
-            "Id":self.iD
+            "Id":self.iD,
+            "username":self.username,
+            "password":self.password
         })
         self.db.buyers.insert_one({
             "username":self.username,
