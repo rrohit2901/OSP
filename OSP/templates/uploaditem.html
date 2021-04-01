@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Upload Item{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name" required><br>
+    <label for="category">Category</label>
+    <input type="category" name="category" id="category" required><br>
+    <label for="price">Price</label>
+    <input type="price" name="price" id="price" required><br>
+    <label for="age">Age</label>
+    <input type="age" name="age" id="age" required><br>
+    <label for="company">Company</label>
+    <input type="company" name="company" id="company" required><br>
+    <label for="info">Product Description</label>
+    <input type="info" name="info" id="info" required><br>
+
+    <input type="submit" value="Upload">
+  </form>
+
+{% endblock %}
+

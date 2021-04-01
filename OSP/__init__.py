@@ -76,7 +76,7 @@ def create_app(test_config=None):
             state = request.form['state']
             country = request.form['country']
             address = request.form['address']
-            telephone = request.form['mobile_number']
+            mobile_number = request.form['mobile_number']
             
             # Error in the validation of form
             error = None
@@ -97,7 +97,7 @@ def create_app(test_config=None):
                 error = 'Email is already registered'
             elif db.users.find_one({"telephone":telephone}):
                 error = 'Mobile number is already registered'
-            elif not telephone:
+            elif not mobile_number:
                 error = 'Mobile Number is required'
             elif not re.search(regex,email):
                 error = 'Email ID not valid'

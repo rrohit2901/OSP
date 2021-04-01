@@ -29,8 +29,8 @@ class Item():
             "isHeavy":1 if self.isHeavy else 0,
             "isVerified":0,
             "city":self.city,
-            "ItemId":item_id
-        })
+            "ItemId":item_id}
+        )
     
     def Verify(self):
         self.isVerified = True
@@ -219,5 +219,17 @@ class Buyer(Customer):
         })
 
 class Seller(Customer):
-    pass
+    def __init__(self, name, email, telephone, address, db, username, password = None):
+        self.super.__init__(name, email, telephone, address, db, username, password)
+        self.sellerId = self.iD
+        self.items = []
+
+    def UpdateDb(self):
+        db.users.update_one({"username":self.username},{"$set":{"items":self.items}})
+
+    def UplaodItem(self, item):
+        pass
+
+    def Negotiate(self):
+        pass
     
