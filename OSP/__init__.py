@@ -94,7 +94,7 @@ def create_app(test_config=None):
                 error = 'Address is required'
             elif db.users.find_one({"email":email}):
                 error = 'Email is already registered'
-            elif db.users.find_one({"telephone":telephone}):
+            elif db.users.find_one({"mobile_number":mobile_number}):
                 error = 'Mobile number is already registered'
             elif not mobile_number:
                 error = 'Mobile Number is required'
@@ -105,11 +105,11 @@ def create_app(test_config=None):
                 password_length = 10
                 username = email.split('@')[0]
                 password = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(password_length))
-                buyer_ins = Entities.Buyer(name, email, telephone, address, city, db, username, password)
-                # seller_ins = Seller(name, email, telephone, address, db, username, password)
+                buyer_ins = Entities.Buyer(name, email, mobile_number, address, city, db, username, password)
+                seller_ins = Entities.Seller(name, email, mobile_number, address, db, username, password)
                 try:
                     buyer_ins.AddToDB()
-                    # seller_ins.AddToDB()
+                    seller_ins.AddToDB()
                     mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
                     mail_sender.starttls()
                     mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
@@ -126,6 +126,7 @@ def create_app(test_config=None):
                 return render_template('Register.html')
 
         return render_template('Register.html')
+        #return render_template('uploaditem.html')
 
         
 

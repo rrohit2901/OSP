@@ -73,10 +73,10 @@ class Order():
 
 
 class Person():
-    def __init__(self, name, email, telephone, address, db):
+    def __init__(self, name, email, mobile_number, address, db):
         self.name = name
         self.email = email
-        self.telephone = telephone
+        self.mobile_number = mobile_number
         self.address = address
         self.db = db
     def GetName(self):
@@ -84,14 +84,14 @@ class Person():
     def GetEmail(self):
         return self.email
     def GetPhone(self):
-        return self.telephone
+        return self.mobile_number
     def GetAddr(self):
         return self.address
 
 class Manager(Person):
     
-    def __init__(self, name, email, telephone, address, gender, DOB, db, username, password = None):
-        self.super.__init__(name, email, telephone, address, db)
+    def __init__(self, name, email, mobile_number, address, gender, DOB, db, username, password = None):
+        self.super.__init__(name, email, mobile_number, address, db)
         self.gender = gender
         self.DOB = DOB
         self.username = username
@@ -107,7 +107,7 @@ class Manager(Person):
         self.db.managers.insert_one({
             "name":self.name, 
             "email":self.email, 
-            "telephone":self.telephone, 
+            "mobile_number":self.mobile_number, 
             "address":self.address, 
             "gender":self.gender, 
             "DOB":self.DOB, 
@@ -147,8 +147,8 @@ class Manager(Person):
 
 
 class Customer(Person):
-    def __init__(self, name, email, telephone, address, db, city, username, password = None):
-        super().__init__(name, email, telephone, address, db)
+    def __init__(self, name, email, mobile_number, address, db, city, username, password = None):
+        super().__init__(name, email, mobile_number, address, db)
         self.city = city
         self.iD = self.db.users.count()
         self.username = username
@@ -169,8 +169,8 @@ class Customer(Person):
 
     
 class Buyer(Customer):
-    def __init__(self, name, email, telephone, address, city, db, username, password = None):
-        super().__init__(name, email, telephone, address, db, city, username, password)
+    def __init__(self, name, email, mobile_number, address, city, db, username, password = None):
+        super().__init__(name, email, mobile_number, address, db, city, username, password)
         self.buyerId = self.iD
         self.history = []
         self.shoppingCart = []
@@ -187,9 +187,9 @@ class Buyer(Customer):
         mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
         mail_sender.starttls()
         mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
-        message = "Hi {},\nYou have requested to buy {} through our portal and in order to proceed further you are supposed to contact the seller of the item. The contact details of the seller are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(self.name, item.name, item.seller.name, item.seller.email, item.seller.telephone)
+        message = "Hi {},\nYou have requested to buy {} through our portal and in order to proceed further you are supposed to contact the seller of the item. The contact details of the seller are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(self.name, item.name, item.seller.name, item.seller.email, item.seller.mobile_number)
         mail_sender.sendmail("ospgroup37@gmail.com", self.email, message)
-        message = "Hi {},\n{} has requested to buy {} through our portal and order to proceed further you are supposed to contact the buyer. The contact details of the buyer are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(item.seller.name, item.name, self.name, self.email, self.telephone)
+        message = "Hi {},\n{} has requested to buy {} through our portal and order to proceed further you are supposed to contact the buyer. The contact details of the buyer are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(item.seller.name, item.name, self.name, self.email, self.mobile_number)
         mail_sender.sendmail("ospgroup37@gmail.com", item.seller.email, message)
         mail_sender.quit()
         # Updating other things
@@ -205,7 +205,7 @@ class Buyer(Customer):
         self.db.users.insert_one({
             "name":self.name, 
             "email":self.email, 
-            "telephone":self.telephone, 
+            "mobile_number":self.mobile_number, 
             "address":self.address, 
             "city":self.city,
             "Id":self.iD,
@@ -219,8 +219,8 @@ class Buyer(Customer):
         })
 
 class Seller(Customer):
-    def __init__(self, name, email, telephone, address, db, username, password = None):
-        self.super.__init__(name, email, telephone, address, db, username, password)
+    def __init__(self, name, email, mobile_number, address, db, username, password = None):
+        super().__init__(name, email, mobile_number, address, db, username, password)
         self.sellerId = self.iD
         self.items = []
 
@@ -232,4 +232,21 @@ class Seller(Customer):
 
     def Negotiate(self):
         pass
-    
+
+    def AddToDB(self):
+        '''
+        self.db.users.insert_one({
+            "name":self.name, 
+            "email":self.email, 
+            "mobile_number":self.mobile_number, 
+            "address":self.address, 
+            "city":self.city,
+            "Id":self.iD,
+            "username":self.username,
+            "password":self.password
+        })
+        '''
+        self.db.sellers.insert_one({
+            "username":self.username,
+            "items":self.items
+        })
