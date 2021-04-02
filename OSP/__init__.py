@@ -32,7 +32,7 @@ def create_app(test_config=None):
     app.register_blueprint(buyer.buyer_print)
 
     try:
-        mongo = MongoClient("mongodb+srv://rrohit2901:Begusarai123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
+        mongo = MongoClient("mongodb+srv://rrohit:BestTrio123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
         db = mongo.test
     except Exception as e:
         print(e)
