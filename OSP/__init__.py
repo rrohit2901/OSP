@@ -7,6 +7,7 @@ from pymongo.mongo_client import MongoClient
 from flask import Flask, request, render_template, url_for, flash, redirect
 from . import Entities
 from . import buyer
+from . import seller
 from email.message import EmailMessage
 
 def create_app(test_config=None):
@@ -30,6 +31,7 @@ def create_app(test_config=None):
         pass
     
     app.register_blueprint(buyer.buyer_print)
+    app.register_blueprint(seller.seller_print)
 
     try:
         mongo = MongoClient("mongodb+srv://rrohit:BestTrio123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
@@ -56,8 +58,10 @@ def create_app(test_config=None):
                 print(db.users.find_one({"username":username}))
                 if role=="1":
                     return redirect('/buyer/{}'.format(username))
+                elif role=="2":
+                    return redirect('/seller/{}'.format(username))
                 else:
-                    return redirect('/seller')
+                    print("Choose a login type")
 
         return render_template('Signin.html')
 
@@ -101,6 +105,8 @@ def create_app(test_config=None):
             elif not re.search(regex,email):
                 error = 'Email ID not valid'
             
+            print(error)
+
             if error is None:
                 password_length = 10
                 username = email.split('@')[0]
