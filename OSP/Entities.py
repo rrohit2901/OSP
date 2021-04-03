@@ -1,5 +1,9 @@
 import random
 import string
+import cloudinary as Cloud
+import smtplib
+from pymongo.mongo_client import MongoClient
+from email.message import EmailMessage
 class Item():
     Id = 0
     def __init__(self, name, category, price, image, age, company, info, seller, weight, db):
@@ -29,8 +33,8 @@ class Item():
             "isHeavy":1 if self.isHeavy else 0,
             "isVerified":0,
             "city":self.city,
-            "ItemId":item_id}
-        )
+            "ItemId":item_id
+        })
     
     def Verify(self):
         self.isVerified = True
@@ -66,10 +70,16 @@ class Item():
 
 class Order():
     def __init__(self, item, buyer, status):
-        self.item = item
+        self.items = item
         self.status = status
         self.buyer = buyer
         self.quantity = 1
+    def IncreaseQty(self, item):
+        self.quantity += 1
+    def GetItem(self):
+        return self.item
+    def GetQty(self):
+        return self.quantity
 
 
 class Person():
@@ -129,9 +139,6 @@ class Manager(Person):
 
     def HelpNego(self):
         pass
-
-    def GetGender(self):
-        return self.gender
     
     def GetDOB(self):
         return self.DOB
@@ -147,9 +154,11 @@ class Manager(Person):
 
 
 class Customer(Person):
-    def __init__(self, name, email, telephone, address, db, city, username, password = None):
+    def __init__(self, name, email, telephone, address, city, state, country, db, username, password = None):
         super().__init__(name, email, telephone, address, db)
         self.city = city
+        self.state = state
+        self.country = country
         self.iD = self.db.users.count()
         self.username = username
         if password is not None:
@@ -169,37 +178,71 @@ class Customer(Person):
 
     
 class Buyer(Customer):
-    def __init__(self, name, email, telephone, address, city, db, username, password = None):
-        super().__init__(name, email, telephone, address, db, city, username, password)
+    def __init__(self, user, buyer, db):
+        super().__init__(user['name'], user['email'], user['telephone'], user['address'], user['city'], user['state'], user['country'], db, user['username'], user['password'])
         self.buyerId = self.iD
-        self.history = []
-        self.shoppingCart = []
+        self.history = buyer['history']
+        self.shoppingCart = buyer['shoppingCart']  
     
+        
     def UpdateDb(self):
-        db.users.update_one({"username":self.username},{"$set":{"history":self.history, "shoppingCart":self.shoppingCart}})
+        self.db.buyers.update_one({"username":self.username},{"$set":{"history":self.history, "shoppingCart":self.shoppingCart}})
     
     def AddToCart(self, item):
         self.shoppingCart.append(item)
         self.UpdateDb()
+    
+    def RemoveFromCart(self, item):
+        self.shoppingCart.remove(item)
+        self.UpdateDb()
 
-    def BuyItem(self, item):
+    def Checkout(self):
         # Sharing contact details
+        for item in self.shoppingCart:
+            seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":item['item']})['seller']})
+            mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
+            mail_sender.starttls()
+            mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
+            mail = EmailMessage()
+            mail['From'] = 'osgrp37@gmail.com'
+            mail['To'] = seller['email']
+            mail['Subject'] = "Order requested."
+            message = "Hi {},\n{} has requested to buy {} through our portal and order to proceed further you are supposed to contact the buyer. The contact details of the buyer are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(seller['name'], self.name, self.db.items.find_one({"ItemId":item['item']})['name'],self.name, self.email, self.telephone)
+            mail.set_content(message)
+            mail_sender.send_message(mail)
+            mail_sender.quit()
+            # Updating other things
+            order = {
+                "item":self.db.items.find_one({"ItemId":item['item']}),
+                "buyer":self.username,
+                "status":"pending"
+            }
+            self.history.append(order)
         mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
         mail_sender.starttls()
         mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
-        message = "Hi {},\nYou have requested to buy {} through our portal and in order to proceed further you are supposed to contact the seller of the item. The contact details of the seller are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(self.name, item.name, item.seller.name, item.seller.email, item.seller.telephone)
-        mail_sender.sendmail("ospgroup37@gmail.com", self.email, message)
-        message = "Hi {},\n{} has requested to buy {} through our portal and order to proceed further you are supposed to contact the buyer. The contact details of the buyer are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(item.seller.name, item.name, self.name, self.email, self.telephone)
-        mail_sender.sendmail("ospgroup37@gmail.com", item.seller.email, message)
+        mail = EmailMessage()
+        mail['From'] = 'osgrp37@gmail.com'
+        mail['To'] = self.email
+        mail['Subject'] = "Order details."
+        message = "Hi\ {},\n\
+            You requested to buy following items through our portal and order to proceed further you are supposed to contact the buyer of corresponding products.\
+            The contact details of the sellers are:-\n\
+            ".format(self.name)
+        for item in self.shoppingCart:
+            seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":item['item']})['seller']})
+            message += "-- Name of item = {}\n   Name of seller = {}\n   Email of seller = {}\n   Mobile number of seller = {}\n".format(self.db.items.find_one({"ItemId":item['item']})['name'], seller['name'], seller['email'], seller['telephone'])
+        mail.set_content(message)
+        mail_sender.send_message(mail)
         mail_sender.quit()
-        # Updating other things
-        shoppingCart.remove(item)
-        order = Order(item, buyer, False)
-        history.append(order)
+        self.shoppingCart.clear()
         self.UpdateDb()
     
     def InitiateNegotiation(self):
         pass
+
+    def GetHistory(self):
+        return self.history
 
     def AddToDB(self):
         self.db.users.insert_one({
@@ -208,6 +251,8 @@ class Buyer(Customer):
             "telephone":self.telephone, 
             "address":self.address, 
             "city":self.city,
+            "state":self.state,
+            "country":self.country,
             "Id":self.iD,
             "username":self.username,
             "password":self.password
@@ -225,7 +270,7 @@ class Seller(Customer):
         self.items = []
 
     def UpdateDb(self):
-        db.users.update_one({"username":self.username},{"$set":{"items":self.items}})
+        self.db.users.update_one({"username":self.username},{"$set":{"items":self.items}})
 
     def UplaodItem(self, item):
         pass

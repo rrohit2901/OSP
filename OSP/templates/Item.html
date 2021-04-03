@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Item</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="LOGO.jpg" rel="icon">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href={{url_for('static', filename='style-starter.css')}}>
+  <link rel="stylesheet" href={{url_for('static', filename='Item.css')}}>
+  
+  
+  <!------ Include the above in your HEAD tag ---------->
+
+</head>
+<body>
+ <!--nav bar-->
+ <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">Online Sales Portal</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href={{url_for('buyer.BHome' , username = username, session=session)}}><i class="fa fa-fw fa-home"></i>Home <span class="sr-only">(current)</span></a>
+        </li>
+      
+      </ul>
+
+      
+      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.ShoppingCart', username = username, session = session)}}><i class="fa fa-fw fa-cart-plus"></i>My Cart</a>
+      &nbsp;
+      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.UserInfo', username = username, session = session)}}><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+    </div>
+</nav>
+<br><br><br>
+<!--Nav bar ends-->
+
+<body>
+    <section class="section-content padding-y bg">
+        <div class="container">
+        
+        <!-- ============================ COMPONENT 1 ================================= -->
+        <div class="card">
+            <div class="row no-gutters">
+                <aside class="col-md-6">
+        <article class="gallery-wrap" style="align-items: center;"> 
+            <div class="img-big-wrap">
+               <a href="#"><img style="width:29rem" src={{item['image']}}></a>
+            </div> <!-- img-big-wrap.// -->
+            
+        </article> <!-- gallery-wrap .end// -->
+                </aside>
+                
+                <main class="col-md-6 border-left">
+                
+        <article class="content-body">
+            
+        <h2 class="title text-center" style="padding-left: 3px;">{{item['name']}}</h2>
+        
+        <div class="rating-wrap my-3" style="padding-right: 1em; text-align-last: right;">
+            <small class="label-rating text-muted">132 reviews</small>
+            <small class="label-rating text-success"> <i class="fa fa-clipboard-check"></i> 154 orders </small>
+        </div> <!-- rating-wrap.// -->
+        
+        <div class="mb-3" style="padding-left: 1em;"> 
+            <var class="price h4">${{item['price']}}</var> 
+        </div> 
+        
+        <p style="padding-left: 1em;">{{item['info']}}</p>
+        
+        <hr>
+        
+            
+        </article> <!-- product-info-aside .// -->
+        <div class="text-center">    
+            &nbsp;
+            <form method = 'post'>
+              <button class="btn  btn-outline-primary" style="height: max-content; width: max-content;" name = "AddToCart" value="AddToCart"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+            </form>
+        </div>     
+        <br>  
+    </main> <!-- col.// -->
+            </div> <!-- row.// -->
+        </div> <!-- card.// -->
+        <!-- ============================ COMPONENT 1 END .// ================================= -->
+        
+        <br>
+        </div> <!-- container .//  -->
+        </section>
+</body>

@@ -4,16 +4,19 @@
   <title>Online Sales Portal</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="LOGO.jpg" rel="icon">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/Buyer.css">
-
+  <link rel="stylesheet" href={{url_for('static', filename='style-starter.css')}}>
+  <link rel="stylesheet" href={{url_for('static', filename='Buyer.css')}}>
   
-
 </head>
-<body>
+<body class = "bg-light">
+
+
+        
 <!--nav bar-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="#">Online Sales Portal</a>
@@ -24,765 +27,332 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="Buyer.html"><i class="fa fa-fw fa-home"></i>Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href={{url_for('buyer.BHome' , username = username, session=session)}}><i class="fa fa-fw fa-home"></i>Home <span class="sr-only">(current)</span></a>
         </li>
         
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Categories
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#sm1">Electronics</a>
-            <a class="dropdown-item" href="#sm4">Groceries</a>
-            <a class="dropdown-item" href="#sm5">Property</a>
-            <a class="dropdown-item" href="#sm6">Jewellery</a>
-            <a class="dropdown-item" href="#sm2">Sports</a>
-            <a class="dropdown-item" href="#sm3">Lifestyle</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Today's Deals</a>
-          </div>
+          {% block header %}
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for category in items.keys() %}
+                    <a class="dropdown-item" href="#{{category}}">{{category}}</a>
+                {% endfor %}
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Today's Deals</a>
+            </div>
+          {% endblock %}
         </li>
         
 
         <li>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search for products" aria-label="Search">
-                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
-              </form>
+            <form class="form-inline my-2 my-lg-0" method="post">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search for products" aria-label="Search" name="query" id="query">
+                <button class="btn btn-outline-dark my-2 my-sm-0" type="submit" name="search_button" value="search_button">Search</button>
+            </form>
         </li>
       </ul>
 
       <form class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fa fa-fw fa-cart-plus"></i>My Cart</button>
-      </form>
+        <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.ShoppingCart', username = username, session = session)}}><i class="fa fa-fw fa-cart-plus"></i>My Cart</a>      </form>
       &nbsp;
-      {% block content %}
       <form class="form-inline my-2 my-lg-0">
-        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit"><i class="fa fa-fw fa-user"></i>{{username}}</button>
-      </form>
-      {% endblock %}
+        <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.UserInfo', username = username, session = session)}}><i class="fa fa-fw fa-user"></i>My Account</a>
+    </form>
       &nbsp;
-      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href="Signin.html"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href="/login"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
     </div>
 </nav>
-<br><br><br>
+<br><br>
 <!--Nav bar ends-->
 
 
-<div id="demo" class="carousel slide" data-ride="carousel">
+    <div id="demo" class="carousel slide" data-ride="carousel">
 
 
-    <ul class="carousel-indicators">
-      <li data-target="#demo" data-slide-to="0" class="active"></li>
-      <li data-target="#demo" data-slide-to="1"></li>
-      <li data-target="#demo" data-slide-to="2"></li>
-    </ul>
-    
-    
-    <div class="carousel-inner text-center">
-      <div class="carousel-item active">
-        <img src="images/c1_.jpg" alt="Los Angeles" width="50%" height="300">
-        <div class="carousel-caption">
-            <h2>Great Deal</h2>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="images/c2_.jpg" alt="Chicago" width="900" height="300">
-        <div class="carousel-caption">
-            <h2>Great Deal</h2>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="images/c3_.jpg" alt="New York" width="900" height="300">
-        <div class="carousel-caption">
-            <h2>Great Deal</h2>
-        </div>
-      </div>
-    </div>
-    
-    
-    <a class="carousel-control-prev" href="#demo" data-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-    </a>
-    <a class="carousel-control-next" href="#demo" data-slide="next">
-      <span class="carousel-control-next-icon"></span>
-    </a>
-</div>
-<!--carousel ends-->
-  <br>
-
-<h1 class="text-white text-center"><div class="btn btn-outline-light"><h1>Top Offers</h1></div></h1><br>
-
-<!--scrollmenu1-->
-<div id = "sm1" class="scrollmenu bg-secondary">
-    <h3 class="card-header text-white" width="100%">Electronics</h3>
-    <div class="row flex-row flex-nowrap">
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p2.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p1.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-    </div>
-</div>
-
-<!--scrollmenu2-->
-<div id = "sm2" class="scrollmenu sm2 bg-info">
-    <h3 class="card-header text-white">Sports</h3>
-    <div class="row flex-row flex-nowrap">
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p2.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p1.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-    </div>
-</div>
-
-<!--scrollmenu3-->
-<div id = "sm3" class="scrollmenu sm3 bg-danger">
-    <h3 class="card-header text-white">Lifestyle</h3>
-    <div class="row flex-row flex-nowrap">
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p2.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p1.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-    </div>
-</div>
-
-<!--scrollmenu4-->
-<div id = "sm4" class="scrollmenu sm4 bg-success">
-    <h3 class="card-header text-white">Groceries</h3>
-    <div class="row flex-row flex-nowrap">
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p2.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p1.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-    </div>
-</div>
-  
-<!--scrollmenu5-->
-<div id = "sm5" class="scrollmenu sm5 bg-primary">
-    <h3 class="card-header text-white">Property</h3>
-    <div class="row flex-row flex-nowrap">
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p2.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p1.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-    </div>
-</div>
-
-<!--scrollmenu6-->
-<div id = "sm6" class="scrollmenu sm6 bg-warning">
-    <h3 class="card-header text-white">Jewellery</h3>
-    <div class="row flex-row flex-nowrap">
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p2.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p1.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p5.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p4.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-        <div class="col-3">
-            <div class="card" style="width: 30rem;">
-                <img src="images/p3.jpg" class="card-img-top" alt="...">
-                
-                <div class="card-body">
-                    <h4>Tailored Jeans</h4>
-                    <p class="price">$19.99</p>
-                    <p>Some text about the jeans..</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
-              </div>
-              <br>
-        </div>
-    </div>
-</div>
-
-  
+        <ul class="carousel-indicators">
+            <li data-target="#demo" data-slide-to="0" class="active"></li>
+            <li data-target="#demo" data-slide-to="1"></li>
+            <li data-target="#demo" data-slide-to="2"></li>
+        </ul>
         
+        
+        <div class="carousel-inner text-center">
+        <div class="carousel-item active">
+            <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363191/c2__fmgpqm.jpg" alt="Los Angeles" width="50%" height="300">
+            <div class="carousel-caption">
+                <h2>Great Deal</h2>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363191/c1__gsqrs3.jpg" alt="Chicago" width="900" height="300">
+            <div class="carousel-caption">
+                <h2>Great Deal</h2>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363191/c3__r7dyev.jpg" alt="New York" width="900" height="300">
+            <div class="carousel-caption">
+                <h2>Great Deal</h2>
+            </div>
+        </div>
+        </div>
+        
+        
+        <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+        </a>
+        <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+        </a>
+    </div>
+    <!--carousel ends-->
+    
+    <section class="w3l-grids-hny-2">
+        <!-- /content-6-section -->
+        <div class="grids-hny-2-mian py-4">
+            <div class="container py-lg-4">
+                    <div style="margin: 8px auto; display: block; text-align:center;">
+    
+    <!---728x90--->
+    
+     
+    </div>
+                <h3 class="hny-title mb-0 text-center">Shop With <span>OSP</span></h3>
+                <p class="mb-4 text-center">Handpicked Favourites just for you</p>
+                <div style="margin: 8px auto; display: block; text-align:center;">
+    
+    <!---728x90--->
+     
+    </div>
+                <div class="welcome-grids row mt-5">
+                    <div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                    <a href="ecommerce.html">
+                                            <img src="static/assets/images/grid1.jpg" class="img-fluid" alt="">
+                                    <div class="boxhny-content">
+                                        <h3 class="title">Product
+                                    </h3></div>
+                                </a>
+                            </div>
+                            <h4><a href="ecommerce.html">Hand Bags</a></h4>
+    
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                    <a href="ecommerce.html">
+                                            <img src="assets/images/grid3.jpg" class="img-fluid" alt="">
+                                    <div class="boxhny-content">
+                                        <h3 class="title">Product</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="ecommerce.html">
+                                    Watches</a></h4>
+    
+                        
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                    <a href="#URL">
+                                            <img src="assets/images/grid2.jpg" class="img-fluid" alt="">
+                                    <div class="boxhny-content">
+                                        <h3 class="title">Product</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="ecommerce.html">Shoes</a></h4>
+    
+                    
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                    <a href="ecommerce.html">
+                                            <img src="assets/images/grid4.jpg" class="img-fluid" alt="">
+                                    <div class="boxhny-content">
+                                        <h3 class="title">Product</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="ecommerce.html">Suits</a></h4>
+    
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                    <a href="ecommerce.html">
+                                            <img src="assets/images/grid5.jpg" class="img-fluid" alt="">
+                                    <div class="boxhny-content">
+                                        <h3 class="title">Product</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="ecommerce.html">
+                                    Accessories</a></h4>
+    
+                        
+                    </div>
+                    <div class="col-lg-2 col-md-4 col-6 welcome-image">
+                            <div class="boxhny13">
+                                    <a href="ecommerce.html">
+                                            <img src="assets/images/grid6.jpg" class="img-fluid" alt="">
+                                    <div class="boxhny-content">
+                                        <h3 class="title">Product</h3>
+                                    </div>
+                                </a>
+                            </div>
+                            <h4><a href="ecommerce.htmlL">
+                                    Fragrances</a></h4>
+    
+                        
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </section>
+
+     <!-- ======= Clients Section ======= -->
+     <section class="section bg-light">
+        <div class="container">
+          <div class="row justify-content-center text-center mb-4">
+            <div class="col-5">
+                <br>
+              <h3 class="hny-title">Our Clients</h2>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit explicabo inventore.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4 col-sm-4 col-md-2">
+              <a href="#" class="client-logo"><img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363165/logo-adobe_op8gtt.png" alt="Image" class="img-fluid"></a>
+            </div>
+            <div class="col-4 col-sm-4 col-md-2">
+              <a href="#" class="client-logo"><img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363165/logo-uber_biy52y.png" alt="Image" class="img-fluid"></a>
+            </div>
+            <div class="col-4 col-sm-4 col-md-2">
+              <a href="#" class="client-logo"><img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363165/logo-apple_edrpzv.png" alt="Image" class="img-fluid"></a>
+            </div>
+            <div class="col-4 col-sm-4 col-md-2">
+              <a href="#" class="client-logo"><img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363165/logo-netflix_xiwh7y.png" alt="Image" class="img-fluid"></a>
+            </div>
+            <div class="col-4 col-sm-4 col-md-2">
+              <a href="#" class="client-logo"><img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363165/logo-nike_fezcoe.png" alt="Image" class="img-fluid"></a>
+            </div>
+            <div class="col-4 col-sm-4 col-md-2">
+              <a href="#" class="client-logo"><img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617363165/logo-google_l7g9hg.png" alt="Image" class="img-fluid"></a>
+            </div>
+            <br>
+          </div>
+        </div>
+    </section>
+    <!-- End Clients Section -->
   
+<br><br>
+<h3 class="hny-title mb-0 text-center">Shop With <span>OSP</span></h3>
+<p class="mb-4 text-center">Handpicked Favourites just for you</p>
+<div style="margin: 8px auto; display: block; text-align:center;">
+<br>
+<!---728x90--->
+</div>
+<form method='post'>
+    <!--scrollmenu3-->
+    {% block content %}
+        {% set cols = ['bg-dark', 'bg-primary', 'bg-success', 'bg-info', 'bg-danger'] %}
+        {% for category in items.keys() %}
+            <div id = "{{category}}" class="scrollmenu {{cols[loop.index%5]}} {{category}}">
+                <h3 class="card-header text-white">{{category}}</h3>
+                <div class="row flex-row flex-nowrap">
+                    {% for item in items[category] %}
+                        <div class="col-3">
+                            <div class="card" style="width: 15rem;">
+                                <img src={{item["image"]}} class="card-img-top" alt="...">
+                                
+                                <div class="card-body">
+                                    <a href='{{url_for('items.ItemPage', itemid=item['ItemId'], session=session, username=username)}}'><h4>{{item['name']}}</h4></a>
+                                    <p class="price">{{item['price']}}</p>
+                                    <p>{{item['info']}}</p>
+                                    <form method = 'post'>
+                                        <button class="btn btn-primary" name="AddToCart" value="{{item['ItemId']}}">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endblock %}
+</form>
+
+      <!-- ======= Services Section ======= -->
+    <section class="section bg-light">
+        <div class="container">
+          <div class="row justify-content-center text-center mb-4">
+            <div class="col-5">
+                <br>
+              <h3 class="h3 heading">Our Services</h3>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit explicabo inventore.</p>
+            </div>
+          </div>
+          <div class="row">
   
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-cube la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Web Design</h4>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit explicabo inventore.</p>
+              <ul class="list-unstyled list-line">
+                <li>Lorem ipsum dolor sit amet consectetur adipisicing</li>
+                <li>Non pariatur nisi</li>
+                <li>Magnam soluta quod</li>
+                <li>Lorem ipsum dolor</li>
+                <li>Cumque quae aliquam</li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-mobile la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Mobile Applications</h4>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit explicabo inventore.</p>
+              <ul class="list-unstyled list-line">
+                <li>Lorem ipsum dolor sit amet consectetur adipisicing</li>
+                <li>Non pariatur nisi</li>
+                <li>Magnam soluta quod</li>
+                <li>Lorem ipsum dolor</li>
+                <li>Cumque quae aliquam</li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-image la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Graphic Design</h4>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit explicabo inventore.</p>
+              <ul class="list-unstyled list-line">
+                <li>Lorem ipsum dolor sit amet consectetur adipisicing</li>
+                <li>Non pariatur nisi</li>
+                <li>Magnam soluta quod</li>
+                <li>Lorem ipsum dolor</li>
+                <li>Cumque quae aliquam</li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-search la-3x mb-4"></span>
+              <h4 class="h4 mb-2">SEO</h4>
+              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit explicabo inventore.</p>
+              <ul class="list-unstyled list-line">
+                <li>Lorem ipsum dolor sit amet consectetur adipisicing</li>
+                <li>Non pariatur nisi</li>
+                <li>Magnam soluta quod</li>
+                <li>Lorem ipsum dolor</li>
+                <li>Cumque quae aliquam</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </section><!-- End Services Section -->
+
+
+  
+
       </div>
     </div>
   </div>
