@@ -38,7 +38,7 @@ class Item():
     
     def Verify(self):
         self.isVerified = True
-        self.db.items.update_one({"ItemId:self.item_id"}, {"$set":{"isVerified":1}})
+        self.db.items.update_one({"ItemId":self.item_id}, {"$set":{"isVerified":1}})
     
     def GetName(self):
         return self.name
@@ -125,20 +125,19 @@ class Manager(Person):
             "password":self.password
         })
     
-    def ManageBuyer(self):
-        pass
+    def ManageBuyer(self, buyer):
+        # Function to delete a buyer instance
+        self.db.buyers.delete_one({"username":buyer.GetuserName()})
 
-    def ManageSeller(self):
-        pass
+    def ManageSeller(self, seller):
+        self.db.sellers.delete_one({"username":seller.GetuserName()})
 
     def Audit(self):
-        pass
+        orders = self.orders.find({})
+        return orders
 
-    def ManageItem(self):
-        pass
-
-    def HelpNego(self):
-        pass
+    def ManageItem(self, item):
+        self.db.items.delete_one({"ItemId":item.GetItemId()})
     
     def GetDOB(self):
         return self.DOB
@@ -240,8 +239,7 @@ class Buyer(Customer):
         self.shoppingCart.clear()
         self.UpdateDb()
     
-    def InitiateNegotiation(self):
-        pass
+ 
 
     def GetHistory(self):
         return self.history
@@ -276,10 +274,13 @@ class Seller(Customer):
         self.db.users.update_one({"username":self.username},{"$set":{"items":self.items}})
 
     def UplaodItem(self, item):
-        pass
+        self.items.append(item.GetId())
+        self.UpdateDb()
 
-    def Negotiate(self):
-        pass
+    def DeleteItem(self, item):
+        self.db.items.delete_one(item)
+        self.items.remove(item['ItemId'])
+        self.UpdateDb()
 
     def AddToDB(self):
         '''
