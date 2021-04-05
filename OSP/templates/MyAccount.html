@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <title>My Account</title>
+  <link rel = "icon" href = 
+"https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" 
+        type = "image/x-icon">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="LOGO.jpg" rel="icon">
@@ -19,7 +22,7 @@
 <body class="bg-light">
  <!--nav bar-->
  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="#">Online Sales Portal</a>
+  <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" width="30">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -63,7 +66,7 @@
                       </tr>
                       <tr>
                         <td>Mobile: </td>
-                        <td>{{userdata['telephone']}}</td>
+                        <td>{{userdata['mobile_number']}}</td>
                       </tr>
                       <tr>
                         <td>Address:</td>
@@ -99,17 +102,17 @@
             <div class="d-flex flex-row align-items-center"><i class="fa fa-long-arrow-left"></i><span class="ml-2"><a href={{url_for('buyer.BHome', username = userdata['username'], session = session)}}>Continue Shopping</a></span></div>
             <hr>
             <h6 class="mb-0">Order History</h6>
-            <div class="d-flex justify-content-between"><span>You have {{history|length}} items in your cart</span>
+            <div class="d-flex justify-content-between"><span>You have {{history|length}} items in your cart</span><div class="d-flex flex-row align-items-center"><span class="text-black-50">Status &nbsp; &nbsp;</span></div></div>
               {% if history|length>0 %}
-                <div class="d-flex flex-row align-items-center"><span class="text-black-50">Status &nbsp; &nbsp;</span></div>
+                
                 {% for item in history %}
-                  <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded"></div>
-                    <div class="d-flex flex-row"><img class="rounded" src={{item['item']['image']}} width="40">
+                <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded">
+                    <div class="d-flex flex-row"><img class="rounded" src={{item['item']['image']}} width="40" height="45">
                         <div class="ml-2"><span class="font-weight-bold d-block">{{item['item']['name']}}</span><span class="spec">{{item['item']['info']}}</span></div>
                     </div>
                     <div class="d-flex flex-row align-items-center"><span class="d-block ml-5 font-weight-bold"><em>{{item['status']}}</em></span></div>
-                {% endfor %}
-                </div>  
+                    </div>
+                {% endfor %} 
               {% endif %}
         </div>
     </div>

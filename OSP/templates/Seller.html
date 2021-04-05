@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Seller</title>
+  <link rel = "icon" href = 
+"https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" 
+        type = "image/x-icon">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="LOGO.jpg" rel="icon">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="MyAccount.css">
+  <link rel="stylesheet" href="Seller.css">
+  <link rel="stylesheet" href="style-starter.css">
+  <script>
+      $(document).ready(function() {            
+        var readURL = function(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.avatar').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        $(".file-upload").on('change', function(){
+            readURL(this);
+        });
+        });
+  </script>
+
+</head>
+<body style="padding-left: 2em;">
+ <!--nav bar-->
+ <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" width="30">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="Buyer.html"><i class="fa fa-fw fa-home"></i>Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Seller's Page</a>
+          </li>
+      </ul>
+      
+      
+       <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href="/login"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+    </div>
+</nav>
+<br><br>
+<!--Nav bar ends-->
+
+<!--Sellers info-->
+<div class="row" >
+      
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+
+
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">Seller's Info</h3>
+        </div>
+        <div class="panel-body">
+          <div class="row">
+            <div class=" col-md-9 col-lg-9 "> 
+              <table class="table table-user-information">
+                <tbody>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{userdata['name']}}</td>
+                      </tr>
+                    <tr>
+                    <td>Email:</td>
+                    <td>{{userdata['email']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Mobile: </td>
+                    <td>{{userdata['mobile_number']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Address:</td>
+                    <td>{{userdata['address']}}</td>
+                  </tr>
+               
+                     <tr>
+                         <tr>
+                    <td>City:</td>
+                    <td>B{{userdata['city']}}</td>
+                  </tr>
+                    <tr>
+                    <td>State:</td>
+                    <td>{{userdata['state']}}</td>
+                  </tr>
+                  <tr>
+                    <td>Country: </td>
+                    <td>India</td>
+                  </tr>                           
+                  </tr>
+                 
+                </tbody>
+              </table>
+              
+            </div>
+          </div>
+        </div>            
+      </div>
+    </div>
+
+    <div class="col-md-7">
+        <div class="product-details mr-2">
+            <hr>
+            <h6 class="mb-0">Pending Orders</h6>
+            <div class="d-flex justify-content-between"><span>You have {{order_list|length}} orders pending</span>
+                <div class="d-flex flex-row align-items-center"><span class="text-black-50">Status &nbsp; &nbsp;</span>
+                </div>
+            </div>
+            {% for order in order_list %}
+                <div class="d-flex justify-content-between align-items-center mt-3 p-2 items rounded">
+                    <div class="d-flex flex-row"><img class="rounded" src={{order['item']['image']}} width="40">
+                        <div class="ml-2"><span class="font-weight-bold d-block">{{order['item']['name']}}</span><span class="spec">{{order['buyer']}}</span></div>
+                    </div>
+                    <div style="float: right;">
+                        <form method = 'post'>
+                            <button class="btn btn-success" name="Confirm" value="{{loop.index}}"> Confirm</button>
+                            <button class="btn btn-danger" name="Reject" value="{{loop.index}}"> Reject</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<hr>
+<!--scrollmenu3-->
+<div class="d-flex align-items-center h-75 ">
+    <div class="container text-center py-4">
+      <h3 class="mb-0 h3">Your Shop</h3>
+    </div>
+  </div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-md-flex">
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+            {% for item in items %}
+                <div class="col-3">
+                    <div class="card" style="width: 15rem;">
+                        <img src={{item['image']}} class="card-img-top" alt="...">
+                        
+                        <div class="card-body">
+                            <h4>{{item['name']}}</h4>
+                            <p class="price">Rs. {{item['price']}}</p>
+                            <p>{{item['city']}}</p>
+                            <form method='post'>
+                              <button class="btn btn-primary" name="Del" value="{{item['ItemId']}}">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<hr>
+
+<form class="form" method="POST" name="Save">
+<div class="container bootstrap snippet">
+    <div class="row">
+  		<div class="col-sm-10"><h4>ADD ITEM</h4></div>
+          
+    </div>
+    
+    <div class="row">
+
+      
+      
+
+    	<div class="col-sm-9">
+          <div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <hr>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="first_name"><h4>Item Name</h4></label>
+                              <input type="text" class="form-control" name="item_name" id="item_name" placeholder="Item name" title="enter your item name">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                            <label for="Price"><h4>Price</h4></label>
+                              <input type="text" class="form-control" name="Price" id="Price" placeholder="XX.XX" title="enter your price if any.">
+                          </div>
+                      </div>
+          
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="Company"><h4>Company</h4></label>
+                              <input type="text" class="form-control" name="Company" id="Company" placeholder="Company" title="enter the Company if any.">
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="Age"><h4>Age</h4></label>
+                              <input type="number" class="form-control" name="Age" id="Age" placeholder="XX Months" title="enter the Age if any.">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="Category"><h4>Category</h4></label>
+                        <input type="text" class="form-control" name="Category" id="Category" rows="3" placeholder="Electronics">
+                      </div>
+                      <div class="form-group">
+                        <label for="weight"><h4>Weight</h4></label>
+                        <input type="number" class="form-control" name="weight" id="weight" rows="3" placeholder="X Kgs">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="path1"><h4>Image Path</h4></label>
+                        <input type="text" class="form-control" name="path1" id="path1" rows="3" placeholder="././.">
+                      </div>
+          
+                      <div class="form-group">
+                        <label for="desc"><h4>Description</h4></label>
+                        <textarea class="form-control" name="desc" id="desc" rows="3">Enter description</textarea>
+                      </div>
+                      
+                      <div class="form-group">
+                           <div class="col-xs-12">
+                                <br>
+                              	<input class="btn btn-lg btn-success" type="submit" value="Save">
+                            </div>
+                      </div>
+              	
+              
+              <hr>
+              
+             </div>
+             
+               
+              </div>
+        </div>
+
+        <div class="col-sm-3">
+              
+            <br>
+            <div class="form-group text-center">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAY1BMVEX///8AAAAwMDCWlpZhYWF0dHRDQ0OgoKD8/PzDw8P09PTm5uZoaGg3NzeGhoaurq7f39+0tLTOzs7u7u5ubm5/f38sLCyjo6M5OTnLy8u7u7uLi4tQUFAnJydISEgfHx8WFhaoVUcvAAADnklEQVR4nO3d63aaQBRAYUEFLwgaY2KamPb9n7JtEi6mAU+YOXNGu7/fLoYdXDBIdCYTAAAAAAAAAACAa7RY5kW2Sd3N7sRj7g9pOt8qRrVW1THxJxeO+vT+8h+qaW/Wpce8v2RHcVG/fK3cN5l67kuSe9G4Vf3yZ92+beo9MMkWkpEP9ctnqoE7/31J8iIaeh6kMNcIFL7tghTqBCb7aApV3qLJSXhuDFC4/bRrWVFOneVP0uEDFJ6dRdNc/bL0iX7h2XWw0hqln3rhutP3ulIaZIh6YWeqNhNdoX3TLlx1jqBJoHph1RZavEUn+oXt7ZLBSeaNcmFz65KkKtsXUC5cNoWPKtsXUC5sZ6ShL/QN5cKi3nymsnkJ5cKs3nyhsnkJ5cJNvflSZfMSyoXNrHuqsnkJCh1RGMB/VKhzOg9WuJ/OejzUu3Aqel7x7DIbCVV4lzhxeKYRqHDvFpgk459MBSp0fiYyHz10oMKZa+H4e7tAhcXQ3ktsRg8dqPDRtfAweuhAhaufjoWyRyBfCXW12P5yChQ/IvhXuDnNrpx/rbmBe+h5waFy+Zgzplnb7c9LKRyHwgAodERhABQ6ojAACh1RGACFjigMgEJHFAZAoSMKA7j9wvLmC3e6uxBB4aT+wH/8s4khMRRu3x/byL+v+C0xFE5Wj8VsqnMEIylUReH1o/D6UXj9KIyB29exoi/cP79k9y4TutgLP74dKf0Bii/EXnj62L3xRzHywqd698bfHUde2HwtK/r/vhxrSuFlFBqjUIBCYxQKUGiMQgEKjVEoQKExCgUoNEahAIXGKBSg0BiFAhQao1CAQmMUClBojEIBCo1RKEChMQoFKDRGoQCFxigUoNAYhQIUGqNQgEJjFApQaIxCAQqNUShAoTEKBW6/MIJ114Y0v5I1fgWPCNbOG+Jh8cII1j8c4uEARLCG5YB2NebxPzmw9LANPe3ffzl6GxGsJTugXRPd4dc/7NcD7teuxnz0shWrNZ17dZYyc/nr26/L3Wfx6umPb762eo9FZyUzt+lIe0b+cxS1ftrv+/ZZZ78cr2Rn69rFcrqpujvlPGdOu1s75faX/nV+tkvu17Ftci4ryqmdssg+7c/41R0buyRmO/fA7uwoPp5mk/Emepsux/pG9fIWfbdNLw8XXOrhJNMR3zvV+2dH6/LyoAEdNC7Mq+p4eeQgjpXanc5imRfZJrWzyYp8GdMtAAAAAAAAAAAAgNxvFacpyY4ZwGcAAAAASUVORK5CYII=" class="avatar img-circle img-thumbnail" alt="Item">
+              <h6>Upload an Item Picture</h6>
+              <input type="file" class="text-center center-block file-upload" name="image">
+            </div>
+            </hr><br>
+        </div>
+  
+                  </div>
+                                                         
+
+                </div>
+              </form> 
+    </body>
+</html>

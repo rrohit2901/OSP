@@ -15,10 +15,10 @@ class Item():
         self.company = company
         self.info = info
         self.seller = seller
-        self.isHeavy = True if weight>500 else False
+        self.isHeavy = True if weight>int(500) else False
         self.isVerified = False
-        self.city = self.seller.city
         self.db = db
+        self.city = self.db.users.find_one({"username":seller})['city']
         self.item_id = Item.Id
         Item.Id += 1
         self.db.items.insert_one({
@@ -29,11 +29,11 @@ class Item():
             "age":age,
             "company":company,
             "info":info,
-            "seller":seller.username,
+            "seller":seller,
             "isHeavy":1 if self.isHeavy else 0,
             "isVerified":0,
             "city":self.city,
-            "ItemId":item_id
+            "ItemId":self.item_id
         })
     
     def Verify(self):
@@ -83,10 +83,10 @@ class Order():
 
 
 class Person():
-    def __init__(self, name, email, telephone, address, db):
+    def __init__(self, name, email, mobile_number, address, db):
         self.name = name
         self.email = email
-        self.telephone = telephone
+        self.telephone = mobile_number
         self.address = address
         self.db = db
     def GetName(self):
@@ -94,14 +94,14 @@ class Person():
     def GetEmail(self):
         return self.email
     def GetPhone(self):
-        return self.telephone
+        return self.mobile_number
     def GetAddr(self):
         return self.address
 
 class Manager(Person):
     
-    def __init__(self, name, email, telephone, address, gender, DOB, db, username, password = None):
-        self.super.__init__(name, email, telephone, address, db)
+    def __init__(self, name, email, mobile_number, address, gender, DOB, db, username, password = None):
+        super().__init__(name, email, mobile_number, address, db)
         self.gender = gender
         self.DOB = DOB
         self.username = username
@@ -117,7 +117,7 @@ class Manager(Person):
         self.db.managers.insert_one({
             "name":self.name, 
             "email":self.email, 
-            "telephone":self.telephone, 
+            "mobile_number":self.telephone, 
             "address":self.address, 
             "gender":self.gender, 
             "DOB":self.DOB, 
@@ -161,6 +161,7 @@ class Customer(Person):
         self.country = country
         self.iD = self.db.users.count()
         self.username = username
+    
         if password is not None:
             self.password = password
         else:
@@ -179,7 +180,7 @@ class Customer(Person):
     
 class Buyer(Customer):
     def __init__(self, user, buyer, db):
-        super().__init__(user['name'], user['email'], user['telephone'], user['address'], user['city'], user['state'], user['country'], db, user['username'], user['password'])
+        super().__init__(user['name'], user['email'], user['mobile_number'], user['address'], user['city'], user['state'], user['country'], db, user['username'], user['password'])
         self.buyerId = self.iD
         self.history = buyer['history']
         self.shoppingCart = buyer['shoppingCart']  
@@ -218,6 +219,7 @@ class Buyer(Customer):
                 "status":"pending"
             }
             self.history.append(order)
+            self.db.orders.insert_one(order)
         mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
         mail_sender.starttls()
         mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
@@ -225,13 +227,13 @@ class Buyer(Customer):
         mail['From'] = 'osgrp37@gmail.com'
         mail['To'] = self.email
         mail['Subject'] = "Order details."
-        message = "Hi\ {},\n\
+        message = "Hi {},\n\
             You requested to buy following items through our portal and order to proceed further you are supposed to contact the buyer of corresponding products.\
             The contact details of the sellers are:-\n\
             ".format(self.name)
         for item in self.shoppingCart:
             seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":item['item']})['seller']})
-            message += "-- Name of item = {}\n   Name of seller = {}\n   Email of seller = {}\n   Mobile number of seller = {}\n".format(self.db.items.find_one({"ItemId":item['item']})['name'], seller['name'], seller['email'], seller['telephone'])
+            message += "-- Name of item = {}\n-- Name of seller = {}\n-- Email of seller = {}\n-- Mobile number of seller = {}\n".format(self.db.items.find_one({"ItemId":item['item']})['name'], seller['name'], seller['email'], seller['mobile_number'])
         mail.set_content(message)
         mail_sender.send_message(mail)
         mail_sender.quit()
@@ -248,7 +250,7 @@ class Buyer(Customer):
         self.db.users.insert_one({
             "name":self.name, 
             "email":self.email, 
-            "telephone":self.telephone, 
+            "mobile_number":self.telephone, 
             "address":self.address, 
             "city":self.city,
             "state":self.state,
@@ -264,10 +266,11 @@ class Buyer(Customer):
         })
 
 class Seller(Customer):
-    def __init__(self, name, email, telephone, address, db, username, password = None):
-        self.super.__init__(name, email, telephone, address, db, username, password)
+    def __init__(self, user, seller, db):
+        super().__init__(user['name'], user['email'], user['telephone'], user['address'], user['city'], user['state'], user['country'], db, user['username'], user['password'])
         self.sellerId = self.iD
-        self.items = []
+        #items->item id of the item
+        self.items = seller['items']    
 
     def UpdateDb(self):
         self.db.users.update_one({"username":self.username},{"$set":{"items":self.items}})
@@ -277,4 +280,21 @@ class Seller(Customer):
 
     def Negotiate(self):
         pass
-    
+
+    def AddToDB(self):
+        '''
+        self.db.users.insert_one({
+            "name":self.name, 
+            "email":self.email, 
+            "mobile_number":self.mobile_number, 
+            "address":self.address, 
+            "city":self.city,
+            "Id":self.iD,
+            "username":self.username,
+            "password":self.password
+        })
+        '''
+        self.db.sellers.insert_one({
+            "username":self.username,
+            "items":self.items
+        })

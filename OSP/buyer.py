@@ -38,10 +38,18 @@ def BHome(username, session = None):
     
     elif request.method == 'POST':
         if request.form.get('search_button'):
-            searchQuery = request.form['query']
-            items = db.items.find({"name":searchQuery}).limit(3)
-            print(items[0]['name'])
-            return "##"
+            name = request.form['query']
+            items = dict()
+            items.clear()
+            for item in db.items.find({'name':name}):
+                if item['category'] in items.keys():
+                    items[item['category']].append(item)
+                else:
+                    items[item['category']] = []
+                    items[item['category']].append(item)
+            print(items)
+            return render_template('Search.html', items = items, username = username, session = session)
+
         elif request.form.get('AddToCart'):
             id = request.form['AddToCart']
             for order in db.buyers.find_one({"username":username})['shoppingCart']:
@@ -57,10 +65,10 @@ def BHome(username, session = None):
                     return render_template('Buyer.html', items = items, username = username, session = session)
             user_inf = db.users.find_one({'username':username})
             buyer_inf = db.buyers.find_one({'username': username})
-            try:
-                user = Entities.Buyer(user_inf, buyer_inf, db)
-            except Exception as e:
-                print(e)
+            # try:
+            user = Entities.Buyer(user_inf, buyer_inf, db)
+            # except Exception as e:
+            #     print(e)
             order = {"item":id, "qty":1}
             user.AddToCart(order)
             items = dict()
@@ -72,6 +80,7 @@ def BHome(username, session = None):
                     items[item['category']] = []
                     items[item['category']].append(item)
             return render_template('Buyer.html', items = items, username = username, session = session)
+
     
 @buyer_print.route('/<username>/account/<session>', methods = ['GET'])
 def UserInfo(username, session = None):
@@ -151,3 +160,4 @@ def ShoppingCart(username, session = None):
                 sum += int(db.items.find_one({"ItemId":order['item']})['price']) * int(order['qty'])
             db.buyers.update_one({"username":username},{"$set":{"shoppingCart" : buyerData['shoppingCart']}})
             return render_template('MyCart.html', username = username, items = items, sum = sum, session = session, qtyD = qtyD)
+        

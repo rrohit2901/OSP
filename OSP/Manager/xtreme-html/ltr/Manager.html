@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title><link href="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png"> Manager</title>
+    
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="../../../LOGO.jpg">
+    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href={{url_for('static', filename='style.css')}}>
+    <link rel="stylesheet" href={{url_for('static', filename='style.min.css')}}>    
+
+</head>
+
+<body>
+
+
+<!--nav bar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+        <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" width="30"> 
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li> -->
+          
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Manager's Page</a>
+          </li>
+        </ul>
+        <form class="d-flex" method="post">
+          <button class="btn btn-outline-dark" type="submit" name="signout" value='signout'>Sign Out</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <br><br>
+<!--Nav bar ends-->
+        <div class="page-wrapper">
+            <div class="page-breadcrumb">
+                <div class="row align-items-center">
+                    <div class="col-5">
+                        <h4 class="page-title">Dashboard</h4>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-md-flex align-items-center">
+                                    <div>
+                                        <h4 class="card-title">Sales Summary</h4>
+                                        <h5 class="card-subtitle">Overview of Latest Month</h5>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <!-- column -->
+                                    <div >
+                                        <!-- <div><img src="/manager/plot.png" width="1100" height="250"></div> -->
+                                        <ul>
+                                            <li>
+                                                <i class="fa fa-arrow-right" aria-hidden="true"></i> Total number of order = {{orders}}
+                                            </li>
+                                            <li>
+                                                <i class="fa fa-arrow-right" aria-hidden="true"></i> Total number of users = {{users|length}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- column -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Feeds</h4>
+                                <div class="feed-widget">
+                                    <ul class="list-style-none feed-body m-0 p-b-20">
+                                        <li class="feed-item">
+                                            <div class="feed-icon bg-info"><i class="far fa-bell"></i></div> You have {{tasks | length}}
+                                            pending tasks.
+                                        </li>
+                                        <li class="feed-item">
+                                            <div class="feed-icon bg-success"><i class="ti-server"></i></div> {{items|length}}
+                                            Items uploaded on portal.
+                                        </li>
+                                        <li class="feed-item">
+                                            <div class="feed-icon bg-warning"><i class="ti-shopping-cart"></i></div> {{orders}}
+                                            orders received.
+                                        </li>
+                                        <li class="feed-item">
+                                            <div class="feed-icon bg-danger"><i class="ti-user"></i></div> {{users|length}} Buyers
+                                            registered.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- column -->
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- title -->
+                                <div class="d-md-flex">
+                                    <div>
+                                        <h4 class="card-title">Items in the Portal</h4>
+                                        <h5 class="card-subtitle">Overview of Items</h5>
+                                    </div>
+                                    
+                                </div>
+                                <!-- title -->
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table v-middle">
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th class="border-top-0">Item</th>
+                                            <th class="border-top-0">View</th>
+                                            <th class="border-top-0">Category</th>
+                                            <th class="border-top-0">Seller</th>
+                                            <th class="border-top-0">Price</th>
+                                            <th class="border-top-0">Delete</th>
+                                            <th class="border-top-0">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in items %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="m-r-10"><a
+                                                            class="btn btn-circle d-flex btn-info text-white">I</a>
+                                                    </div>
+                                                    <div class="">
+                                                        <h4 class="m-b-0 font-16">{{item['name']}}</h4>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <form method="post">
+                                                    <button class=" btn btn-orange text-white" name="itemPage" value={{item['ItemId']}}>Item Page </button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <form method='post'>
+                                                <select class="custom-select btn-purple" id="inputGroupSelect03" name="categoryChange">
+                                                    <option value="{{item['category']}}" selected>{{item['category']}}</option>
+                                                    {% for category in categories %}
+                                                        {% if item['category']!=category %}
+                                                            <option value="{{category}}_{{item['ItemId']}}">{{category}}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                  </select>
+                                                </form>
+                                                  
+                                            </td>
+                                            
+                                            <td>{{item['seller']}}</td>
+                                            <td>
+                                                <h5 class="m-b-0">{{item['price']}}</h5>
+                                            </td>
+                                            <form method="post">
+                                                <td><button class="btn btn-danger text-white" name="delItem" value={{item['ItemId']}}> Delete</button></td>
+                                                <td>
+                                                    {% if item['isVerified']=="0" %}
+                                                        <button class=" btn btn-success text-white" name="verify" value={{item['ItemId']}}>Verify </button>
+                                                    {% else %}
+                                                        <button class=" btn btn-success text-white" disbaled>Verified </button>
+                                                    {% endif %}
+                                                </td>
+                                            </form>
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- column -->
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- title -->
+                                <div class="d-md-flex">
+                                    <div>
+                                        <h4 class="card-title">Buyers</h4>
+                                        <h5 class="card-subtitle">Overview of Buyers</h5>
+                                    </div>
+                                    
+                                </div>
+                                <!-- title -->
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table v-middle">
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th class="border-top-0">Buyer Name</th>
+                                            <th class="border-top-0">View</th>
+                                            <th class="border-top-0">Delete</th>
+                                            <th class="border-top-0">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in users %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="m-r-10"><a
+                                                                class="btn btn-circle d-flex btn-info text-white">B</a>
+                                                        </div>
+                                                        <div class="">
+                                                            <h4 class="m-b-0 font-16">{{user['name']}}</h4>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <form method='post'>
+                                                    <td>
+                                                        <button class=" btn btn-primary text-white" name="accn" value="{{user['Id']}}">Account </button>
+                                                    </td>                                                                                 
+                                                    <td><button class="btn btn-danger text-white" name="del" value="{{user['Id']}}"> Delete</button></td>
+                                                    <td>
+                                                        <button class=" btn btn-success text-white" disabled>Save </button>
+                                                    </td>
+                                                </form>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- title -->
+                                <div class="d-md-flex">
+                                    <div>
+                                        <h4 class="card-title">Sellers</h4>
+                                        <h5 class="card-subtitle">Overview of Sellers</h5>
+                                    </div>
+                                    
+                                </div>
+                                <!-- title -->
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table v-middle">
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th class="border-top-0">Seller Name</th>
+                                            <th class="border-top-0">View</th>
+                                            <th class="border-top-0">Delete</th>
+                                            <th class="border-top-0">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for user in users %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="m-r-10"><a
+                                                            class="btn btn-circle d-flex btn-info text-white">S</a>
+                                                    </div>
+                                                    <div class="">
+                                                        <h4 class="m-b-0 font-16">{{user['name']}}</h4>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <form method='post'>
+                                                <td>
+                                                    <button class=" btn btn-primary text-white" name="accn_1" value="{{user['Id']}}">Account </button>
+                                                </td>                                                                                 
+                                                <td><button class="btn btn-danger text-white" name="del_1" value="{{user['Id']}}"> Delete</button></td>
+                                                <td>
+                                                    <button class=" btn btn-success text-white" disabled>Save </button>
+                                                </td>
+                                            </form>
+                                            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- column -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Recent Negotiations</h4>
+                            </div>
+                            <div class="comment-widgets scrollable">
+                                <!-- Comment Row -->
+                                {% for task in tasks %}
+                                <div class="d-flex flex-row comment-row m-t-0">
+                                    <div class="p-2"><img src="../../assets/images/users/1.jpg" alt="user" width="50"
+                                            class="rounded-circle"></div>
+                                    <div class="comment-text w-100">
+                                        <h6 class="font-medium">{{task['buyer']}}</h6>
+                                        <h6 class="font-medium">{{task['seller']}}</h6>
+                                        
+                                        <div class="comment-footer">
+                                            <span class="text-muted float-end">{{task['date']}}</span> <span
+                                                class="label label-rounded label-primary">{{task['status']}}</span> <span
+                                                class="action-icons">
+                                                <a href="javascript:void(0)"><i class="ti-check"></i></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- column -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Manager Info</h4>
+                                <div class="d-flex align-items-center flex-row m-t-30">
+                                    
+                                    <div class="m-l-10">
+                                        <h3 class="m-b-0">{{manager_obj['name']}}</h3><small>Manager, OSP</small>
+                                    </div>
+                                </div>
+                                <table class="table no-border mini-table m-t-25">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-muted">DoB</td>
+                                            <td class="font-medium">{{manager_obj['DOB']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Gender</td>
+                                            <td class="font-medium">{{manager_obj['gender']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Email</td>
+                                            <td class="font-medium">{{manager_obj['email']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Mobile</td>
+                                            <td class="font-medium">{{manager_obj['mobile_number']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-muted">Address</td>
+                                            <td class="font-medium">{{manager_obj['address']}}</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    <script src="../../assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../dist/js/app-style-switcher.js"></script>
+    <!--Wave Effects -->
+    <script src="../../dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="../../dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="../../dist/js/custom.js"></script>
+    <!--This page JavaScript -->
+    <!--chartis chart-->
+    <script src="../../assets/libs/chartist/dist/chartist.min.js"></script>
+    <script src="../../assets/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="../../dist/js/pages/dashboards/dashboard1.js"></script>
+</body>
+
+</html>

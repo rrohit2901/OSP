@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Online Sales Portal</title>
+  <link rel = "icon" href = 
+"https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" 
+        type = "image/x-icon">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="LOGO.jpg" rel="icon">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href={{url_for('static', filename='style-starter.css')}}>
+  <link rel="stylesheet" href={{url_for('static', filename='Buyer.css')}}>
+  
+</head>
+<body class = "bg-light">
+
+
+        
+<!--nav bar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" width="30">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href={{url_for('buyer.BHome' , username = username, session=session)}}><i class="fa fa-fw fa-home"></i>Home <span class="sr-only">(current)</span></a>
+        </li>
+        
+        
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0">
+        <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.ShoppingCart', username = username, session = session)}}><i class="fa fa-fw fa-cart-plus"></i>My Cart</a>      </form>
+      &nbsp;
+      <form class="form-inline my-2 my-lg-0">
+        <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.UserInfo', username = username, session = session)}}><i class="fa fa-fw fa-user"></i>My Account</a>
+    </form>
+      &nbsp;
+      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href="/login"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+    </div>
+</nav>
+<br><br>
+<!--Nav bar ends-->
+
+
+      
+<br><br>
+<h3 class="hny-title mb-0 text-center">Shop With <span>OSP</span></h3>
+<p class="mb-4 text-center">Search results for your query sorted according to category</p>
+<div style="margin: 8px auto; display: block; text-align:center;">
+<br>
+<!---728x90--->
+</div>
+<form method='post'>
+    <!--scrollmenu3-->
+    {% block content %}
+        {% set cols = ['bg-light', 'bg-dark', 'bg-secondary', 'bg-info', 'bg-warning'] %}
+        {% for category in items.keys() %}
+            <div id = "{{category}}" class="scrollmenu {{cols[loop.index%5]}} {{category}}">
+                <h3 class="card-header text-white">{{category}}</h3>
+                <div class="row flex-row flex-nowrap">
+                    {% for item in items[category] %}
+                        <div class="col-2">
+                            <div class="card" style="width: 15rem;">
+                                <img src={{item["image"]}} class="card-img-top" alt="...">
+                                
+                                <div class="card-body">
+                                    <a href='{{url_for('items.ItemPage', itemid=item['ItemId'], session=session, username=username)}}'><h4>{{item['name']}}</h4></a>
+                                    <p class="price">{{item['price']}}</p>
+                                    <p>{{item['info']}}</p>
+                                    <form method = 'post'>
+                                        <button class="btn btn-primary" name="AddToCart" value="{{item['ItemId']}}">Add to Cart</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endblock %}
+</form>
+
+      <!-- ======= Services Section ======= -->
+    <section class="section bg-light">
+        <div class="container">
+          <div class="row justify-content-center text-center mb-4">
+            <div class="col-5">
+                <br>
+              <h3 class="h3 heading">Our Services</h3>
+              <p>One stop need for all shopping and buying needs.</p>
+            </div>
+          </div>
+          <div class="row">
+  
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-cube la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Reach out to us</h4>
+              <p>We are very careful towards customer grievance management. Thus we can easily be reached through many mediums which include mail, facebook, etc. You can reach out to us at</p>
+              <ul class="list-unstyled list-line">
+                <li><i class="fa fa-envelope" aria-hidden="true"></i> ospgrp37@gmail.com</li>
+                <li><i class="fa fa-mobile" aria-hidden="true"  style="font-size:20px"></i> 7479218456/57/58</li>
+                <li><i class="fa fa-facebook-official" style="font-size:24px"></i>    <i class="fa fa-instagram" style="font-size:24px"></i>        <i class="fa fa-twitter" style="font-size:24px"></i></li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-mobile la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Mobile Applications</h4>
+              <p>To make our services more accesible we are soon rolling out our android based mobile application with key features:-</p>
+              <ul class="list-unstyled list-line">
+                <li><i class="fa fa-telegram" aria-hidden="true" style="font-size:18px"></i> Offline access</li>
+                <li><i class="fa fa-money" aria-hidden="true" style="font-size:18px"></i> Easy payments</li>
+                <li><i class="fa fa-universal-access" aria-hidden="true" style="font-size:18px"></i> Increased access</li>
+                <li></li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-image la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Major cities</h4>
+              <p>Currently, the major cities in which we provide our servies are</p>
+              <ul class="list-unstyled list-line">
+                <li><i class="fa fa-trello"></i> Delhi</li>
+                <li><i class="fa fa-trello"></i> Bhopal</li>
+                <li><i class="fa fa-trello"></i> Chandigarh</li>
+                <li><i class="fa fa-trello"></i> Bombay</li>
+                <li><i class="fa fa-trello"></i> Kolkata</li>
+              </ul>
+            </div>
+            <div class="col-12 col-sm-6 col-md-6 col-lg-3">
+              <span class="la la-search la-3x mb-4"></span>
+              <h4 class="h4 mb-2">Our Team</h4>
+              <p>Our team consists of three members.</p>
+              <ul class="list-unstyled list-line">
+                <li><i class="fa fa-user" aria-hidden="true"></i> Rohit Raj</li>
+                <li><i class="fa fa-user" aria-hidden="true"></i> Ishan Goel</li>
+                <li><i class="fa fa-user" aria-hidden="true"></i> Abhilash Dutta</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </section><!-- End Services Section -->
+
+
+  
+
+      </div>
+    </div>
+  </div>
+  
+  
+  
+
+</body>
+</html>

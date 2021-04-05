@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <title>Item</title>
+  <link rel = "icon" href = 
+"https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" 
+        type = "image/x-icon">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="LOGO.jpg" rel="icon">
@@ -19,7 +22,7 @@
 <body>
  <!--nav bar-->
  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-    <a class="navbar-brand" href="#">Online Sales Portal</a>
+  <img src="https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617621518/shop8_1_qkichg.png" width="30">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -35,7 +38,7 @@
       
       <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.ShoppingCart', username = username, session = session)}}><i class="fa fa-fw fa-cart-plus"></i>My Cart</a>
       &nbsp;
-      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href={{url_for('buyer.UserInfo', username = username, session = session)}}><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
+      <a class="btn btn-outline-dark my-2 my-sm-0" type="submit" href="/login"><i class="fa fa-fw fa-sign-out"></i>Sign Out</a>
     </div>
 </nav>
 <br><br><br>
@@ -72,7 +75,9 @@
             <var class="price h4">${{item['price']}}</var> 
         </div> 
         
+        <p style="padding-left: 1em;">{{item['seller']}}</p>
         <p style="padding-left: 1em;">{{item['info']}}</p>
+        
         
         <hr>
         
@@ -81,7 +86,8 @@
         <div class="text-center">    
             &nbsp;
             <form method = 'post'>
-              <button class="btn  btn-outline-primary" style="height: max-content; width: max-content;" name = "AddToCart" value="AddToCart"> <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i>  </button>
+              <button class="btn  btn-outline-primary" style="height: max-content; width: max-content;" name = "AddToCart" value="AddToCart"> <span class="text">Add to cart</span> <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+              </button>
             </form>
         </div>     
         <br>  

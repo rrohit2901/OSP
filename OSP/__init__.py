@@ -8,6 +8,8 @@ from flask import Flask, request, render_template, url_for, flash, redirect
 from . import Entities
 from . import buyer
 from . import items
+from . import Manager
+from . import seller
 from email.message import EmailMessage
 import json
 
@@ -33,9 +35,11 @@ def create_app(test_config=None):
     
     app.register_blueprint(buyer.buyer_print)
     app.register_blueprint(items.item_print)
+    app.register_blueprint(Manager.manager_print)
+    app.register_blueprint(seller.seller_print)
 
     try:
-        mongo = MongoClient("mongodb+srv://rrohit2901:Begusarai123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
+        mongo = MongoClient("mongodb+srv://rrohit:BestTrio123@cluster0.iwy8x.mongodb.net/test?retryWrites=true&w=majority") 
         db = mongo.test
     except Exception as e:
         print(e)
@@ -64,9 +68,9 @@ def create_app(test_config=None):
                     url = url_for('buyer.BHome', username = username, session = jsession)
                     return redirect(url)
                 else:
-                    return redirect('/seller')
+                    url = url_for('seller.SHome', username = username, session = jsession)
+                    return redirect(url)
         return render_template('Signin.html')
-
 
     @app.route('/')
     def home():
@@ -83,7 +87,7 @@ def create_app(test_config=None):
             user_dict['state'] = request.form['state']
             user_dict['country'] = request.form['country']
             user_dict['address'] = request.form['address']
-            user_dict['telephone'] = request.form['mobile_number']
+            user_dict['mobile_number'] = request.form['mobile_number']
             
             # Error in the validation of form
             error = None
@@ -109,19 +113,23 @@ def create_app(test_config=None):
             # elif not re.search(regex,email):
             #     error = 'Email ID not valid'
             
+            print(error)
+
             if error is None:
                 buyer_dict = dict()
+                seller_dict = dict()
                 password_length = 10
                 user_dict['Id'] = db.users.count()
                 user_dict['username'] = user_dict['email'].split('@')[0]
                 user_dict['password'] = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(password_length))
                 buyer_dict['history'] = []
                 buyer_dict['shoppingCart'] = []
+                seller_dict['items'] = []
                 buyer_ins = Entities.Buyer(user_dict, buyer_dict, db)
-                # seller_ins = Seller(name, email, telephone, address, db, username, password)
+                seller_ins = Entities.Seller(user_dict, seller_dict, db)
                 try:
                     buyer_ins.AddToDB()
-                    # seller_ins.AddToDB()
+                    seller_ins.AddToDB()
                     mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
                     mail_sender.starttls()
                     mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
