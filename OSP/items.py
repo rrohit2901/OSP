@@ -20,7 +20,8 @@ Cloud.config.update = ({
 
 @item_print.route('/<itemid>/<session>/<username>', methods = ['POST', 'GET'])
 def ItemPage(itemid, session, username):
-    item = db.items.find_one({"ItemId":itemid})
+    item = db.items.find_one({"ItemId":int(itemid)})
+    print(item)
     if request.method == 'GET':
         if not session:
             redirect('/')

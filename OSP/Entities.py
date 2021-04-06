@@ -5,7 +5,6 @@ import smtplib
 from pymongo.mongo_client import MongoClient
 from email.message import EmailMessage
 class Item():
-    Id = 0
     def __init__(self, name, category, price, image, age, company, info, seller, weight, db):
         self.name = name
         self.category = category
@@ -19,8 +18,8 @@ class Item():
         self.isVerified = False
         self.db = db
         self.city = self.db.users.find_one({"username":seller})['city']
-        self.item_id = Item.Id
-        Item.Id += 1
+        self.item_id = int(self.db.system.find_one({})['ItemId'])
+        self.db.system.update_one({}, {"$set":{"ItemId":str(self.item_id+1)}})
         self.db.items.insert_one({
             "name":name,
             "category":category,
@@ -199,7 +198,7 @@ class Buyer(Customer):
     def Checkout(self):
         # Sharing contact details
         for item in self.shoppingCart:
-            seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":item['item']})['seller']})
+            seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":int(item['item'])})['seller']})
             mail_sender = smtplib.SMTP('smtp.gmail.com', 587)
             mail_sender.starttls()
             mail_sender.login("ospgrp37@gmail.com", "BestTrio123")
@@ -207,13 +206,13 @@ class Buyer(Customer):
             mail['From'] = 'osgrp37@gmail.com'
             mail['To'] = seller['email']
             mail['Subject'] = "Order requested."
-            message = "Hi {},\n{} has requested to buy {} through our portal and order to proceed further you are supposed to contact the buyer. The contact details of the buyer are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(seller['name'], self.name, self.db.items.find_one({"ItemId":item['item']})['name'],self.name, self.email, self.telephone)
+            message = "Hi {},\n{} has requested to buy {} through our portal and order to proceed further you are supposed to contact the buyer. The contact details of the buyer are:-\n\t\t\tName - {}\n\t\t\tEmail Id - {}\n\t\t\tMobile number - {}\nRegards\nTeam 37".format(seller['name'], self.name, self.db.items.find_one({"ItemId":int(item['item'])})['name'],self.name, self.email, self.telephone)
             mail.set_content(message)
             mail_sender.send_message(mail)
             mail_sender.quit()
             # Updating other things
             order = {
-                "item":self.db.items.find_one({"ItemId":item['item']}),
+                "item":self.db.items.find_one({"ItemId":int(item['item'])}),
                 "buyer":self.username,
                 "status":"pending"
             }
@@ -231,8 +230,8 @@ class Buyer(Customer):
             The contact details of the sellers are:-\n\
             ".format(self.name)
         for item in self.shoppingCart:
-            seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":item['item']})['seller']})
-            message += "-- Name of item = {}\n-- Name of seller = {}\n-- Email of seller = {}\n-- Mobile number of seller = {}\n".format(self.db.items.find_one({"ItemId":item['item']})['name'], seller['name'], seller['email'], seller['mobile_number'])
+            seller = self.db.users.find_one({"username":self.db.items.find_one({"ItemId":int(item['item'])})['seller']})
+            message += "-- Name of item = {}\n-- Name of seller = {}\n-- Email of seller = {}\n-- Mobile number of seller = {}\n".format(self.db.items.find_one({"ItemId":int(item['item'])})['name'], seller['name'], seller['email'], seller['mobile_number'])
         mail.set_content(message)
         mail_sender.send_message(mail)
         mail_sender.quit()

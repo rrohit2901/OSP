@@ -97,10 +97,10 @@ def SHome(username, session = None):
             mail_sender.quit()
 
         elif request.form.get('Del'):
-            id = request.form['Del']
+            id = int(request.form['Del'])
             sItems = db.sellers.find_one({'username':username})['items']
             for item in sItems:
-                if item['ItemId']==db.orders.find_one({'_id':order_list[index]['_id']})['item']['ItemId']:
+                if item['ItemId']==db.orders.find_one({'_id':order_list[id]['_id']})['item']['ItemId']:
                     sItems.remove(item)
                     break
             db.sellers.update_one({'username':username}, {"$set":{'items':sItems}})
@@ -127,11 +127,12 @@ def SHome(username, session = None):
             age = request.form['Age']
             info = request.form['desc']
             path1 = request.form['path1']
-            image = open(path1+request.form['image'],"rb")
-            image = cloudinary.uploader.upload(image)['url']
+            # image = open(path1+request.form['image'],"rb")
+            image = cloudinary.uploader.upload(path1+request.form['image'])['url']
             print(image)
             seller = username
             weight = int(request.form['weight'])
             item = Entities.Item(name, category, price, image, age, company, info, seller, weight, db)
+            return redirect('/login')
 
     return render_template('Seller.html', userdata = userdata, items = items, order_list = order_list, session = session)

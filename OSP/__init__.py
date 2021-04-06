@@ -91,26 +91,26 @@ def register():
         # Error in the validation of form
         error = None
 
-        # if not name:
-        #     error = 'Name of user is required'
-        # elif not email:
-        #     error = 'Email is required'
-        # elif not city:
-        #     error = 'City is required'
-        # elif not state:
-        #     error = 'State is required'
-        # elif not country:
-        #     error = 'Country is required'
-        # elif not address:
-        #     error = 'Address is required'
-        # elif db.users.find_one({"email":email}):
-        #     error = 'Email is already registered'
-        # elif db.users.find_one({"telephone":telephone}):
-        #     error = 'Mobile number is already registered'
-        # elif not mobile_number:
-        #     error = 'Mobile Number is required'
-        # elif not re.search(regex,email):
-        #     error = 'Email ID not valid'
+        if not user_dict['name']:
+            error = 'Name of user is required'
+        elif not user_dict['email']:
+            error = 'Email is required'
+        elif not user_dict['city']:
+            error = 'City is required'
+        elif not user_dict['state']:
+            error = 'State is required'
+        elif not user_dict['country']:
+            error = 'Country is required'
+        elif not user_dict['address']:
+            error = 'Address is required'
+        elif db.users.find_one({"email":user_dict['email']}):
+            error = 'Email is already registered'
+        elif db.users.find_one({"telephone":user_dict['mobile_number']}):
+            error = 'Mobile number is already registered'
+        elif not user_dict['mobile_number']:
+            error = 'Mobile Number is required'
+        elif not re.search(regex,user_dict['email']):
+            error = 'Email ID not valid'
         
         print(error)
 

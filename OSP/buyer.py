@@ -97,9 +97,9 @@ def ShoppingCart(username, session = None):
         qtyD = dict()
         sum = 0
         for order in buyerData['shoppingCart']:
-            items.append(db.items.find_one({"ItemId":order['item']}))
-            qtyD[order['item']] = order['qty']
-            sum += int(db.items.find_one({"ItemId":order['item']})['price']) * int(order['qty'])
+            items.append(db.items.find_one({"ItemId":int(order['item'])}))
+            qtyD[int(order['item'])] = order['qty']
+            sum += int(db.items.find_one({"ItemId":int(order['item'])})['price']) * int(order['qty'])
         return render_template('MyCart.html', username = username, items = items, sum = sum, session = session, qtyD = qtyD)
     elif request.method == 'POST':
         if request.form.get('checkout'):
@@ -125,9 +125,9 @@ def ShoppingCart(username, session = None):
                 if order['qty']==0:
                     remList.append(order)
                     continue
-                items.append(db.items.find_one({"ItemId":order['item']}))
-                qtyD[order['item']] = order['qty']
-                sum += int(db.items.find_one({"ItemId":order['item']})['price']) * int(order['qty'])
+                items.append(db.items.find_one({"ItemId":int(order['item'])}))
+                qtyD[int(order['item'])] = order['qty']
+                sum += int(db.items.find_one({"ItemId":int(order['item'])})['price']) * int(order['qty'])
             for order in remList:
                 buyerData['shoppingCart'].remove(order)
             db.buyers.update_one({"username":username},{"$set":{"shoppingCart" : buyerData['shoppingCart']}})
@@ -139,11 +139,11 @@ def ShoppingCart(username, session = None):
             qtyD = dict()
             sum = 0
             for order in buyerData['shoppingCart']:
-                items.append(db.items.find_one({"ItemId":order['item']}))
+                items.append(db.items.find_one({"ItemId":int(order['item'])}))
                 if order['item']==str(id):
                     order['qty'] += 1
-                qtyD[order['item']] = order['qty']
-                sum += int(db.items.find_one({"ItemId":order['item']})['price']) * int(order['qty'])
+                qtyD[int(order['item'])] = order['qty']
+                sum += int(db.items.find_one({"ItemId":int(order['item'])})['price']) * int(order['qty'])
             db.buyers.update_one({"username":username},{"$set":{"shoppingCart" : buyerData['shoppingCart']}})
             return render_template('MyCart.html', username = username, items = items, sum = sum, session = session, qtyD = qtyD)
         elif request.form.get('removeItem'):
@@ -155,9 +155,9 @@ def ShoppingCart(username, session = None):
             qtyD = dict()
             sum = 0
             for order in buyerData['shoppingCart']:
-                items.append(db.items.find_one({"ItemId":order['item']}))
+                items.append(db.items.find_one({"ItemId":int(order['item'])}))
                 qtyD[order['item']] = order['qty']
-                sum += int(db.items.find_one({"ItemId":order['item']})['price']) * int(order['qty'])
+                sum += int(db.items.find_one({"ItemId":int(order['item'])})['price']) * int(order['qty'])
             db.buyers.update_one({"username":username},{"$set":{"shoppingCart" : buyerData['shoppingCart']}})
             return render_template('MyCart.html', username = username, items = items, sum = sum, session = session, qtyD = qtyD)
         
