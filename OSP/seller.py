@@ -128,7 +128,10 @@ def SHome(username, session = None):
             info = request.form['desc']
             path1 = request.form['path1']
             # image = open(path1+request.form['image'],"rb")
-            image = cloudinary.uploader.upload(path1+request.form['image'])['url']
+            try:
+                image = cloudinary.uploader.upload(path1+request.form['image'])['url']
+            except:
+                image = "https://res.cloudinary.com/dr9bqxbvl/image/upload/v1617360844/p5_bawtfw.jpg"
             print(image)
             seller = username
             weight = int(request.form['weight'])
