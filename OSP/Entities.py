@@ -265,7 +265,7 @@ class Buyer(Customer):
 
 class Seller(Customer):
     def __init__(self, user, seller, db):
-        super().__init__(user['name'], user['email'], user['telephone'], user['address'], user['city'], user['state'], user['country'], db, user['username'], user['password'])
+        super().__init__(user['name'], user['email'], user['mobile_number'], user['address'], user['city'], user['state'], user['country'], db, user['username'], user['password'])
         self.sellerId = self.iD
         #items->item id of the item
         self.items = seller['items']    
