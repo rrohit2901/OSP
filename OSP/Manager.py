@@ -145,7 +145,7 @@ def MHome(username, session):
     elif request.method == 'POST':
         if request.form.get('delItem'):
             id = int(request.form['delItem'])
-            db.items.delete_one({"ItemId":str(id)})
+            db.items.delete_one({"ItemId":id})
             manager_obj = db.managers.find_one({"username":username})
             print(manager_obj)
             users = []
@@ -268,6 +268,6 @@ def MHome(username, session):
         elif request.form.get('itemPage'):
             Ssession = json.loads(session)
             id = int(request.form['itemPage'])
-            item = db.items.find_one({"ItemId":str(id)})
+            item = db.items.find_one({"ItemId":id})
             print(item)
             return render_template('Item.html', item = item, session = session, username = Ssession['username'])
