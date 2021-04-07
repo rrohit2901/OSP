@@ -5,6 +5,7 @@ import cloudinary.uploader
 import smtplib
 from email.message import EmailMessage
 from . import Entities
+from . import items
 import json
 
 seller_print = Blueprint('seller', __name__, url_prefix = '/seller')
@@ -140,6 +141,6 @@ def SHome(username, session = None):
             seller = username
             weight = int(request.form['weight'])
             item = Entities.Item(name, category, price, image, age, company, info, seller, weight, db)
-            return redirect('/login')
+            return redirect(url_for('items.ItemPage',itemid=item.item_id, session = session, username = username))
 
     return render_template('Seller.html', userdata = userdata, items = items, order_list = order_list, session = session)
